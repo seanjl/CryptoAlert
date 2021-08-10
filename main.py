@@ -1,9 +1,10 @@
 import requests
+import emailAlert
 import keys
 import pandas as pd
 from time import sleep
 
-# Sean Leitch, 27th July 2021
+# Sean Leitch, 10th August 2021
 # In this example I'm using ETH and EUR, but you can choose the currency you want
 
 def get_crypto_rates(base_currency='EUR', assets='ETH'):
@@ -38,9 +39,11 @@ def set_alert(dataframe, asset, alert_high_price, alert_low_price):
 
     if crypto_value >= alert_high_price:
         print((details + ' << COIN IS EXPENSIVE! SELL NOW!'))
+        emailAlert.sendEmailAlertSell()
     else:
         if crypto_value <= alert_low_price:
             print((details + ' << COIN IS CHEAP! BUY NOW!'))
+            emailAlert.sendEmailAlertBuy()
         else:
             print((details + ' << KEEP HOLDING!'))
 
@@ -51,7 +54,7 @@ while True:
 
     try:
         df = get_crypto_rates()
-        set_alert(df, 'ETH', 2600, 1600) # Here is where you choose highPriceAlert and lowPriceAlert
+        set_alert(df, 'ETH', 2750, 1600) # Here is where you choose highPriceAlert and lowPriceAlert
     except Exception as e:
         print('API Request failed...trying again')
 
